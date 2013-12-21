@@ -311,10 +311,23 @@ function Termino(grid, col) {
         _redraw();
     };
 
+    var _adjustToBounds = function() {
+        /* check if too far left */
+        if( (_gridPos.x() + _loX) < 0 ) {
+            that.move(1, 0);
+        }
+
+        /* check if too far right */
+        if( (_gridPos.x() + _myWidth) > GRID_WIDTH ) {
+            that.move(-1, 0);
+        }
+    };
+
     this.rotateRight = function () {
         _rotationIndex = (_rotationIndex + 1) % 4;
         _curShape = _myShape[_rotationIndex];
         _redraw();
+        _adjustToBounds();
     };
 
     this.rotateLeft = function () {
@@ -363,7 +376,7 @@ function Termino(grid, col) {
         if (x !== 0) {
             _redrawGhost();
         }
-        this.updatePos();
+        _updatePos();
         return true;
     };
 
@@ -386,7 +399,7 @@ function Termino(grid, col) {
     };
 
 
-    this.updatePos = function () {
+    var _updatePos = function () {
         for (var i = 0; i < _easelShapes.length; i++) {
             for (var j = 0; j < _easelShapes[0].length; j++) {
                 var s = _easelShapes[i][j];
@@ -423,8 +436,9 @@ function Termino(grid, col) {
             }
         }
         // this.move(0, 0);
+        _adjustToBounds();
         _redrawGhost();
-        that.updatePos();
+        _updatePos();
     };
 
 }

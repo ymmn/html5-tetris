@@ -7,7 +7,8 @@ function Player (board, controls) {
 		up: 5,
 		space: 5,
 		pause: 5,
-		down: 2
+		down: 2,
+		swap: 5
 	};
 
 	var _debounce = function(input, key) {
@@ -24,6 +25,7 @@ function Player (board, controls) {
 	};
 
 	this.tick = function(input){
+		var ret = false;
 		if( _debounce(input, "left") ) {
 			board.termino.move(-1, 0);
 		}
@@ -42,6 +44,10 @@ function Player (board, controls) {
 		if(_debounce(input, "pause") ) {
 			board.paused = !paused;
 		}
+		if(_debounce(input, "swap") ) {
+			board.swapWithSavedTermino();
+		}
+		return ret;
 	};
 
 }

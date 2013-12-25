@@ -1,15 +1,15 @@
-function Termino(gameGridContainer, grid, col, w, deadTerminos, board) {
+function Termino(type, board) {
 
-	var WIDTH = w;
+    this.type = type;
     var _rotationIndex = 0;
-    var _myShape = grid;
+    var _myShape = board.TERMINO_SHAPES[type].shape;
     var _easelShapes = new Array(4);
     for (var i = 0; i < _easelShapes.length; i++) {
         _easelShapes[i] = new Array(4);
     }
     var _shapeBounds = {};
-    var _gridPos = $V([0, 0]);
-    var _myColor = col;
+    var _gridPos = $V([4, 0]);
+    var _myColor = board.TERMINO_SHAPES[type].color;
     var _curShape = _myShape[_rotationIndex];
     var that = this;
     var _ghost = [];
@@ -33,9 +33,9 @@ function Termino(gameGridContainer, grid, col, w, deadTerminos, board) {
 
         g.beginStroke("#000");
         g.beginFill(_myColor);
-        g.drawRect(x * WIDTH, y * WIDTH, WIDTH, WIDTH);
+        g.drawRect(x * board.BLOCK_SIZE, y * board.BLOCK_SIZE, board.BLOCK_SIZE, board.BLOCK_SIZE);
         g.endFill();
-        gameGridContainer.addChild(s);
+        board.gameGridContainer.addChild(s);
         return s;
     };
 
@@ -45,7 +45,7 @@ function Termino(gameGridContainer, grid, col, w, deadTerminos, board) {
 
     var _removeGhost = function () {
         for (var i = 0; i < _ghost.length; i++) {
-            gameGridContainer.removeChild(_ghost[i]);
+            board.gameGridContainer.removeChild(_ghost[i]);
         }
         _ghost = [];
     };
@@ -60,9 +60,9 @@ function Termino(gameGridContainer, grid, col, w, deadTerminos, board) {
 
                     g.beginStroke("#FFF");
                     // g.beginFill(_myColor);
-                    g.drawRect((gx + x) * WIDTH, (gy + y) * WIDTH, WIDTH, WIDTH);
+                    g.drawRect((gx + x) * board.BLOCK_SIZE, (gy + y) * board.BLOCK_SIZE, board.BLOCK_SIZE, board.BLOCK_SIZE);
                     // g.endFill();
-                    gameGridContainer.addChild(s);
+                    board.gameGridContainer.addChild(s);
                     _ghost.push(s);
                 }
             }
@@ -122,7 +122,7 @@ function Termino(gameGridContainer, grid, col, w, deadTerminos, board) {
             for (var x = 0; x < shape[0].length; x++) {
                 if (shape[y][x] === 'X') {
                     // console.log("x " + x + " y " + y);
-                    if (deadTerminos.isOccupied(newx + x, newy + y)) {
+                    if (board.deadTerminos.isOccupied(newx + x, newy + y)) {
                         return false;
                     }
                 }
@@ -165,20 +165,47 @@ function Termino(gameGridContainer, grid, col, w, deadTerminos, board) {
             return true;
         } else {
             _removeGhost();
-            deadTerminos.addTermino(_easelShapes, _gridPos, _myColor);
-            board.newTermino();
+            board.deadTerminos.addTermino(_easelShapes, _gridPos, _myColor);
+            board.newTermino(true);
             return false;
         }
     };
 
+    this.remove = function(){
+        for (var i = 0; i < _easelShapes.length; i++) {
+            for (var j = 0; j < _easelShapes[0].length; j++) {
+                var s = _easelShapes[i][j];
+                if (s !== undefined) {
+                    board.gameGridContainer.removeChild(s);
+                    board.swapContainer.removeChild(s);
+                }
+            }
+        }
+        _removeGhost();
+    };
+
+    this.drawAsSwap = function(){
+        this.remove();
+        for (var i = 0; i < _easelShapes.length; i++) {
+            for (var j = 0; j < _easelShapes[0].length; j++) {
+                var s = _easelShapes[i][j];
+                if (s !== undefined) {
+                    // WHY?
+                    s.x = i * board.BLOCK_SIZE / 20;
+                    s.y = j * board.BLOCK_SIZE / 20;
+                    board.swapContainer.addChild(s);
+                }
+            }
+        }
+    };
 
     var _updatePos = function () {
         for (var i = 0; i < _easelShapes.length; i++) {
             for (var j = 0; j < _easelShapes[0].length; j++) {
                 var s = _easelShapes[i][j];
                 if (s !== undefined) {
-                    s.x = WIDTH * _gridPos.x();
-                    s.y = WIDTH * _gridPos.y();
+                    s.x = board.BLOCK_SIZE * _gridPos.x();
+                    s.y = board.BLOCK_SIZE * _gridPos.y();
                 }
             }
         }
@@ -215,7 +242,7 @@ function Termino(gameGridContainer, grid, col, w, deadTerminos, board) {
             for (var y = 0; y < _easelShapes[0].length; y++) {
                 if (_curShape[y][x] != "X") {
                     // delete shape
-                    gameGridContainer.removeChild(_easelShapes[x][y]);
+                    board.gameGridContainer.removeChild(_easelShapes[x][y]);
                     _easelShapes[x][y] = undefined;
                 } else {
                     if (_easelShapes[x][y] === undefined) {

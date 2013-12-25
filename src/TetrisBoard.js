@@ -1,25 +1,23 @@
 function TetrisBoard(origin, w, stage) {
 
     // global variables
-    var WIDTH = w;
+    var that = this;
     var BACKGROUND_COLOR = "#CDA";
     var GAME_BOUNDS = {
         lo: 0,
-        hi: WIDTH * GRID_WIDTH
+        hi: that.BLOCK_SIZE * GRID_WIDTH
     };
     var boardContainer;
-    var gameGridContainer;
+    var savedTermino = undefined;
     var opponent;
     var stage;
     var gameGrid;
     var paused = false;
-    this.dead = false;
-    var deadTerminos;
     var linesSentText;
     var gameOverText;
     var linesSent = 0;
-    var that = this;
-    var TERMINO_SHAPES = [
+    var canSwap = true;
+    that.TERMINO_SHAPES = [
 
         /* straight */
         {
@@ -180,6 +178,10 @@ function TetrisBoard(origin, w, stage) {
         }
     ];
 
+    that.gameGridContainer = null;
+    that.deadTerminos = null;
+    that.dead = false;
+    that.BLOCK_SIZE = w;
 
     function drawGameGrid() {
         for (var x = 0; x < GRID_WIDTH; x++) {
@@ -194,16 +196,16 @@ function TetrisBoard(origin, w, stage) {
                     color = "#222";
                 }
                 g.beginFill(color);
-                g.drawRect(x * WIDTH, y * WIDTH, WIDTH, WIDTH);
+                g.drawRect(x * that.BLOCK_SIZE, y * that.BLOCK_SIZE, that.BLOCK_SIZE, that.BLOCK_SIZE);
                 g.endFill();
-                gameGridContainer.addChild(s);
+                that.gameGridContainer.addChild(s);
             }
         }
 
     }
 
     this.addConcreteLines = function (numlines) {
-    	deadTerminos.addConcreteLines(numlines);
+    	that.deadTerminos.addConcreteLines(numlines);
     };
 
     this.setOpponent = function(o) {
@@ -224,15 +226,31 @@ function TetrisBoard(origin, w, stage) {
         linesSentText.text = "Lines: " +  linesSent;
     };
 
-    this.newTermino = function() {
-        var ind = Math.floor(Math.random() * TERMINO_SHAPES.length);
-        var t = TERMINO_SHAPES[ind];
-        that.termino = new Termino(gameGridContainer, t.shape, t.color, WIDTH, deadTerminos, this);
+    this.swapWithSavedTermino = function() {
+        if(canSwap){
+            var prev = savedTermino;
+            var type = undefined;
+            if( prev !== undefined ) {
+                prev.remove();
+                type = prev.type;
+            }
+            savedTermino = that.termino;
+            that.termino.drawAsSwap();
+            that.newTermino(false, type);
+        }
+    };
+
+    this.newTermino = function(placed, ind) {
+        canSwap = placed;
+        if( ind === undefined ) {
+            ind = Math.floor(Math.random() * that.TERMINO_SHAPES.length);
+        }
+        that.termino = new Termino(ind, this);
         that.termino.addToStage();
     };
 
     this.tick = function(){
-	    if (!that.dead && !paused && createjs.Ticker.getTicks() % 10 === 0) {
+	    if (!that.dead && !paused && createjs.Ticker.getTicks() % 40 === 0) {
 	        that.termino.fall();
 	    }
     };
@@ -241,6 +259,7 @@ function TetrisBoard(origin, w, stage) {
         boardContainer = new createjs.Container();
         boardContainer.x += origin.x;
         boardContainer.y += origin.y;
+
 
         var background = new createjs.Shape();
         var g = background.graphics;
@@ -251,18 +270,23 @@ function TetrisBoard(origin, w, stage) {
         g.endFill();
         boardContainer.addChild(background);
 
-        gameGridContainer = new createjs.Container();
-        gameGridContainer.x += 30;
-        gameGridContainer.y += 30;
+        that.gameGridContainer = new createjs.Container();
+        that.gameGridContainer.x += 30;
+        that.gameGridContainer.y += 30;
 
-        boardContainer.addChild(gameGridContainer);
+        that.swapContainer = new createjs.Container();
+        that.swapContainer.x = GRID_WIDTH * that.BLOCK_SIZE + that.gameGridContainer.x + 5;
+        that.swapContainer.y = 0; 
+
+        boardContainer.addChild(that.gameGridContainer);
+        boardContainer.addChild(that.swapContainer);
 
 	    drawGameGrid();
 
-	    deadTerminos = new DeadTerminos(WIDTH, gameGridContainer, that);
-	    that.newTermino();
+	    that.deadTerminos = new DeadTerminos(that);
+	    that.newTermino(true);
         linesSentText = new createjs.Text("Lines: 0", "20px Arial", "#000");
-        linesSentText.x = GRID_WIDTH * WIDTH + gameGridContainer.x + 5;
+        linesSentText.x = GRID_WIDTH * that.BLOCK_SIZE + that.gameGridContainer.x + 5;
         linesSentText.y = 100;
 
         boardContainer.addChild(linesSentText);

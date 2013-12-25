@@ -14,5 +14,10 @@ TODOS
 - [X] Disable arrow keys scrolling window
 - [X] Undebounce arrow keys
 - [X] Cannot move and rotate at same time
-- [ ] Save/change termino
-- [ ] Next queu
+- [X] Save/change termino
+- [ ] Next queue
+- [ ] Effects: disappearing line and falling pile
+- [ ] Controls: allow rotate into right or left adjacent location
+- [ ] Start menu
+- [ ] COMMENT CODE
+- [ ] Fix slippery controls

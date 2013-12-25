@@ -26,6 +26,9 @@ function keyHandler(e, isPressed){
     case Keycode.SPACE:
         input.space = isPressed;
         break;
+    case Keycode.C:
+        input.swap = isPressed;
+        break;
     default:
         return false;
     }
@@ -107,11 +110,6 @@ function init() {
 }
 
 function tick(event) {
-    //tick event
-    // if(window.event.keyCode == Keycode.RIGHT) {
-        // console.log("HEHE");
-    // }
-    if(createjs.Ticker.getTicks() % 10 == 0 )    console.log(createjs.Ticker.getMeasuredFPS());
     player1.tick(input);
     tetrisBoard1.tick();
     tetrisBoard2.tick();

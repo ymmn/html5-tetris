@@ -1,6 +1,5 @@
-function DeadTerminos(w, gameGridContainer, board) {
+function DeadTerminos(board) {
 
-	var WIDTH = w;
     var _grid = Array(GRID_WIDTH);
     var _concreteLines = [];
     for (var i = 0; i < GRID_WIDTH; i++) {
@@ -20,14 +19,14 @@ function DeadTerminos(w, gameGridContainer, board) {
      	for(var i = 0; i < _grid.length; i++){
     		for(var j = 0; j < _grid[0].length; j++) {
     			if(_grid[i][j] !== undefined) {
-    				_grid[i][j].y += linesToRemove * WIDTH;
+    				_grid[i][j].y += linesToRemove * board.BLOCK_SIZE;
     			}
     		}
     	}   	
      	for(var i = 0; i < linesToRemove; i++) {
     		var line = _concreteLines[l -  1 - i];
     		for(var j = 0; j < GRID_WIDTH; j++) {
-                gameGridContainer.removeChild(line[j]);
+                board.gameGridContainer.removeChild(line[j]);
     		}
     	}   	
     	_concreteLines = _concreteLines.slice(0, l - linesToRemove);
@@ -37,7 +36,7 @@ function DeadTerminos(w, gameGridContainer, board) {
     	for(var i = 0; i < _grid.length; i++){
     		for(var j = 0; j < _grid[0].length; j++) {
     			if(_grid[i][j] !== undefined) {
-    				_grid[i][j].y -= numLines * WIDTH;
+    				_grid[i][j].y -= numLines * board.BLOCK_SIZE;
     			}
     		}
     	}
@@ -51,9 +50,9 @@ function DeadTerminos(w, gameGridContainer, board) {
 
                 var color = "#888";
                 g.beginFill(color);
-                g.drawRect(j * WIDTH, (GRID_HEIGHT - 1 - _concreteLines.length) * WIDTH, WIDTH, WIDTH);
+                g.drawRect(j * board.BLOCK_SIZE, (GRID_HEIGHT - 1 - _concreteLines.length) * board.BLOCK_SIZE, board.BLOCK_SIZE, board.BLOCK_SIZE);
                 g.endFill();
-                gameGridContainer.addChild(s);
+                board.gameGridContainer.addChild(s);
                 line.push(s);
     		}
     		_concreteLines.push(line);
@@ -79,7 +78,7 @@ function DeadTerminos(w, gameGridContainer, board) {
 
     var _deleteLine = function (y) {
         for (var x = 0; x < GRID_WIDTH; x++) {
-            gameGridContainer.removeChild(_grid[x][y]);
+            board.gameGridContainer.removeChild(_grid[x][y]);
             _grid[x][y] = undefined;
         }
     };
@@ -94,7 +93,7 @@ function DeadTerminos(w, gameGridContainer, board) {
                     var s = _grid[x][y - 1];
                     _grid[x][y] = s;
                     _grid[x][y - 1] = undefined;
-                    s.y += WIDTH;
+                    s.y += board.BLOCK_SIZE;
                 }
             }
         }

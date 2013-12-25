@@ -8,6 +8,7 @@ function TetrisBoard(origin, w, stage) {
         hi: that.BLOCK_SIZE * GRID_WIDTH
     };
     var boardContainer;
+    var nextTermino;
     var savedTermino = undefined;
     var opponent;
     var stage;
@@ -235,7 +236,7 @@ function TetrisBoard(origin, w, stage) {
                 type = prev.type;
             }
             savedTermino = that.termino;
-            that.termino.drawAsSwap();
+            that.termino.drawInContainer(that.swapContainer);
             that.newTermino(false, type);
         }
     };
@@ -244,9 +245,18 @@ function TetrisBoard(origin, w, stage) {
         canSwap = placed;
         if( ind === undefined ) {
             ind = Math.floor(Math.random() * that.TERMINO_SHAPES.length);
+            if( nextTermino !== undefined ) {
+                that.termino = nextTermino;
+                that.termino.addToStage();
+                that.termino.move(0, 0);
+            } else {
+                that.termino = new Termino(ind, this);
+            }
+            nextTermino = new Termino(Math.floor(Math.random() * that.TERMINO_SHAPES.length), this);
+            nextTermino.drawInContainer(that.nextQueueContainer);
+        } else {
+            that.termino = new Termino(ind, this);
         }
-        that.termino = new Termino(ind, this);
-        that.termino.addToStage();
     };
 
     this.tick = function(){
@@ -278,8 +288,13 @@ function TetrisBoard(origin, w, stage) {
         that.swapContainer.x = GRID_WIDTH * that.BLOCK_SIZE + that.gameGridContainer.x + 5;
         that.swapContainer.y = 0; 
 
+        that.nextQueueContainer = new createjs.Container();
+        that.nextQueueContainer.x = GRID_WIDTH * that.BLOCK_SIZE + that.gameGridContainer.x + 5;
+        that.nextQueueContainer.y = 200; 
+
         boardContainer.addChild(that.gameGridContainer);
         boardContainer.addChild(that.swapContainer);
+        boardContainer.addChild(that.nextQueueContainer);
 
 	    drawGameGrid();
 

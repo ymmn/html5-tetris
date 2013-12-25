@@ -70,7 +70,14 @@ function Termino(type, board) {
     };
 
     this.addToStage = function () {
-        _redraw();
+        for (var i = 0; i < _easelShapes.length; i++) {
+            for (var j = 0; j < _easelShapes[0].length; j++) {
+                var s = _easelShapes[i][j];
+                if (s !== undefined) {
+                    board.gameGridContainer.addChild(s);
+                }
+            }
+        }
     };
 
     var _getRequiredBoundsAdjustment = function(rotIndex) {
@@ -146,7 +153,7 @@ function Termino(type, board) {
         _gridPos = $V([newx, newy]);
 
         /* draw ghost */
-        if (x !== 0) {
+        if (true || x !== 0) {
             _redrawGhost();
         }
         _updatePos();
@@ -178,13 +185,14 @@ function Termino(type, board) {
                 if (s !== undefined) {
                     board.gameGridContainer.removeChild(s);
                     board.swapContainer.removeChild(s);
+                    board.nextQueueContainer.removeChild(s);
                 }
             }
         }
         _removeGhost();
     };
 
-    this.drawAsSwap = function(){
+    this.drawInContainer = function(container){
         this.remove();
         for (var i = 0; i < _easelShapes.length; i++) {
             for (var j = 0; j < _easelShapes[0].length; j++) {
@@ -193,7 +201,7 @@ function Termino(type, board) {
                     // WHY?
                     s.x = i * board.BLOCK_SIZE / 20;
                     s.y = j * board.BLOCK_SIZE / 20;
-                    board.swapContainer.addChild(s);
+                    container.addChild(s);
                 }
             }
         }
@@ -257,5 +265,7 @@ function Termino(type, board) {
         _redrawGhost();
         _updatePos();
     };
+
+    _redraw();
 
 }

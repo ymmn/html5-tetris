@@ -21,3 +21,4 @@ TODOS
 - [ ] Start menu
 - [ ] COMMENT CODE
 - [ ] Fix slippery controls
+- [ ] Add sound

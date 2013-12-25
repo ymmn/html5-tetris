@@ -1,4 +1,4 @@
-function DeadTerminos(w, origin, board) {
+function DeadTerminos(w, gameGridContainer, board) {
 
 	var WIDTH = w;
     var _grid = Array(GRID_WIDTH);
@@ -10,6 +10,27 @@ function DeadTerminos(w, origin, board) {
     this.isOccupied = function (x, y) {
     	if( y >= (GRID_HEIGHT - _concreteLines.length) ) return true;
         return _grid[x][y + _concreteLines.length] !== undefined;
+    };
+
+    var _removeConcreteLines = function(numLines) {
+    	var l = _concreteLines.length;
+
+        /* make sure not to remove more than the number of concrete lines */
+        var linesToRemove = Math.min(l, numLines);
+     	for(var i = 0; i < _grid.length; i++){
+    		for(var j = 0; j < _grid[0].length; j++) {
+    			if(_grid[i][j] !== undefined) {
+    				_grid[i][j].y += linesToRemove * WIDTH;
+    			}
+    		}
+    	}   	
+     	for(var i = 0; i < linesToRemove; i++) {
+    		var line = _concreteLines[l -  1 - i];
+    		for(var j = 0; j < GRID_WIDTH; j++) {
+                gameGridContainer.removeChild(line[j]);
+    		}
+    	}   	
+    	_concreteLines = _concreteLines.slice(0, l - linesToRemove);
     };
 
     this.addConcreteLines = function(numLines) {
@@ -30,9 +51,9 @@ function DeadTerminos(w, origin, board) {
 
                 var color = "#888";
                 g.beginFill(color);
-                g.drawRect(origin.x + j * WIDTH, origin.y + (GRID_HEIGHT - 1 - _concreteLines.length) * WIDTH, WIDTH, WIDTH);
+                g.drawRect(j * WIDTH, (GRID_HEIGHT - 1 - _concreteLines.length) * WIDTH, WIDTH, WIDTH);
                 g.endFill();
-                stage.addChild(s);
+                gameGridContainer.addChild(s);
                 line.push(s);
     		}
     		_concreteLines.push(line);
@@ -47,6 +68,9 @@ function DeadTerminos(w, origin, board) {
             for (var x = 0; x < shape[0].length; x++) {
                 if (shape[x][y] !== undefined) {
                     _grid[pos.x() + x][pos.y() + y + _concreteLines.length] = shape[x][y];
+                    if( (pos.y() + y) == 0) {
+                    	board.die();
+                    }
                 }
             }
         }
@@ -55,7 +79,7 @@ function DeadTerminos(w, origin, board) {
 
     var _deleteLine = function (y) {
         for (var x = 0; x < GRID_WIDTH; x++) {
-            stage.removeChild(_grid[x][y]);
+            gameGridContainer.removeChild(_grid[x][y]);
             _grid[x][y] = undefined;
         }
     };
@@ -93,10 +117,10 @@ function DeadTerminos(w, origin, board) {
             }
         }
         board.attackOpponent(cleared);
+        _removeConcreteLines(cleared);
         console.log("cleared " + cleared);
     };
 
-    window.boom = this.addConcreteLines;
-    window.bam = this.isOccupied;
+    this.addConcreteLines(5);
 
 }

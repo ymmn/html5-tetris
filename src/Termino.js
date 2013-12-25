@@ -1,4 +1,4 @@
-function Termino(origin, grid, col, w, deadTerminos, board) {
+function Termino(gameGridContainer, grid, col, w, deadTerminos, board) {
 
 	var WIDTH = w;
     var _rotationIndex = 0;
@@ -33,9 +33,9 @@ function Termino(origin, grid, col, w, deadTerminos, board) {
 
         g.beginStroke("#000");
         g.beginFill(_myColor);
-        g.drawRect(origin.x + x * WIDTH, origin.y + y * WIDTH, WIDTH, WIDTH);
+        g.drawRect(x * WIDTH, y * WIDTH, WIDTH, WIDTH);
         g.endFill();
-        stage.addChild(s);
+        gameGridContainer.addChild(s);
         return s;
     };
 
@@ -45,7 +45,7 @@ function Termino(origin, grid, col, w, deadTerminos, board) {
 
     var _removeGhost = function () {
         for (var i = 0; i < _ghost.length; i++) {
-            stage.removeChild(_ghost[i]);
+            gameGridContainer.removeChild(_ghost[i]);
         }
         _ghost = [];
     };
@@ -60,16 +60,16 @@ function Termino(origin, grid, col, w, deadTerminos, board) {
 
                     g.beginStroke("#FFF");
                     // g.beginFill(_myColor);
-                    g.drawRect(origin.x + (gx + x) * WIDTH, origin.y + (gy + y) * WIDTH, WIDTH, WIDTH);
+                    g.drawRect((gx + x) * WIDTH, (gy + y) * WIDTH, WIDTH, WIDTH);
                     // g.endFill();
-                    stage.addChild(s);
+                    gameGridContainer.addChild(s);
                     _ghost.push(s);
                 }
             }
         }
     };
 
-    this.addToStage = function (stage) {
+    this.addToStage = function () {
         _redraw();
     };
 
@@ -215,7 +215,7 @@ function Termino(origin, grid, col, w, deadTerminos, board) {
             for (var y = 0; y < _easelShapes[0].length; y++) {
                 if (_curShape[y][x] != "X") {
                     // delete shape
-                    stage.removeChild(_easelShapes[x][y]);
+                    gameGridContainer.removeChild(_easelShapes[x][y]);
                     _easelShapes[x][y] = undefined;
                 } else {
                     if (_easelShapes[x][y] === undefined) {

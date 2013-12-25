@@ -3,6 +3,7 @@ var GRID_WIDTH = 10;
 var player1;
 var player2;
 var stage;
+var BOARD_DIMS;
 
 function handleKeyDown(e) {
     // for crossbrowser compatibility, as found in CreateJS example code
@@ -32,15 +33,22 @@ function init() {
 
     window.onkeydown = handleKeyDown;
 
+
+    var w = canvas.height/22;
+    BOARD_DIMS = {
+        width: w * GRID_WIDTH + 120,
+        height: w * GRID_HEIGHT + 60
+    };
+
     tetrisBoard2 = new TetrisBoard(
-        { x: 400, y: 0 },
-        canvas.height/20,
+        { x: BOARD_DIMS.width + 50, y: 0 },
+        w,
         stage
     );
 
     tetrisBoard1 = new TetrisBoard(
         { x: 0, y: 0 },
-        canvas.height/20,
+        w,
         stage
     );
 

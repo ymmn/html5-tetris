@@ -7,8 +7,11 @@ TODOS
 - [X] Bug: can rotate termino out of screen
 - [X] Add the rest of the shapes
 - [X] Bug: can rotate termino into other terminos
-- [ ] Basic HUD
-- [ ] Send lines to other player
-- [ ] Gameover / KO
+- [X] Basic HUD
+- [X] Send lines to other player
+- [X] Gameover
+- [ ] KO
 - [X] Disable arrow keys scrolling window
 - [ ] Undebounce arrow keys
+- [ ] Save/change termino
+- [ ] Next queu

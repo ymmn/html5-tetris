@@ -10,8 +10,13 @@ function handleKeyDown(e) {
         var e = window.event;
     }
 
-    player1.handleKeyDown(e);
-    player2.handleKeyDown(e);
+    var preventDef = player1.handleKeyDown(e);
+    preventDef = player2.handleKeyDown(e) || preventDef;
+
+    /* prevent arrow keys from scrolling window */
+    if( preventDef ) {
+        e.preventDefault();
+    }
 
 }
 
@@ -27,14 +32,14 @@ function init() {
 
     window.onkeydown = handleKeyDown;
 
-    tetrisBoard1 = new TetrisBoard(
-        { x: 0, y: 0 },
+    tetrisBoard2 = new TetrisBoard(
+        { x: 400, y: 0 },
         canvas.height/20,
         stage
     );
 
-    tetrisBoard2 = new TetrisBoard(
-        { x: 400, y: 0 },
+    tetrisBoard1 = new TetrisBoard(
+        { x: 0, y: 0 },
         canvas.height/20,
         stage
     );
@@ -49,7 +54,9 @@ function init() {
             pause: Keycode.P,
             hardDrop: Keycode.SPACE
         });
-    player2 = new Player(tetrisBoard2);
+    player2 = new Player(
+        tetrisBoard2,
+        {});
 
     // call update on the stage to make it render the current display list to the canvas:
     stage.update();

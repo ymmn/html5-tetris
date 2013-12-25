@@ -2,12 +2,25 @@ function DeadTerminos(w) {
 
 	var WIDTH = w;
     var _grid = Array(GRID_WIDTH);
+    var _numConcreteLines = 0;
     for (var i = 0; i < GRID_WIDTH; i++) {
         _grid[i] = Array(GRID_HEIGHT);
     }
 
     this.isOccupied = function (x, y) {
-        return _grid[x][y] !== undefined;
+    	if( y >= (GRID_HEIGHT - _numConcreteLines) ) return true;
+        return _grid[x][y + _numConcreteLines] !== undefined;
+    };
+
+    this.addConcreteLines = function(numLines) {
+    	_numConcreteLines += numLines;
+    	for(var i = 0; i < _grid.length; i++){
+    		for(var j = 0; j < _grid[0].length; j++) {
+    			if(_grid[i][j] !== undefined) {
+    				_grid[i][j].y -= numLines * WIDTH;
+    			}
+    		}
+    	}
     };
 
     /**
@@ -17,7 +30,7 @@ function DeadTerminos(w) {
         for (var y = 0; y < shape.length; y++) {
             for (var x = 0; x < shape[0].length; x++) {
                 if (shape[x][y] !== undefined) {
-                    _grid[pos.x() + x][pos.y() + y] = shape[x][y];
+                    _grid[pos.x() + x][pos.y() + y + _numConcreteLines] = shape[x][y];
                 }
             }
         }
@@ -62,5 +75,8 @@ function DeadTerminos(w) {
             }
         }
     };
+
+    window.boom = this.addConcreteLines;
+    window.bam = this.isOccupied;
 
 }

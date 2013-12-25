@@ -112,7 +112,7 @@ function Termino(origin, grid, col, w, deadTerminos, board) {
         var bounds = _getShapeBounds(shape);
         // console.log("lo " + bounds.loX + " hi " + bounds.hiX);
         if ( /* x bounds */ (newx + bounds.loX) < 0 || (newx + bounds.hiX) > GRID_WIDTH ||
-            /* y bounds */
+             /* y bounds  */
             (newy + bounds.loY) < 0 || (newy + bounds.hiY) > GRID_HEIGHT) {
             return false;
         }

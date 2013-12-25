@@ -10,3 +10,4 @@ TODOS
 - [ ] Basic HUD
 - [ ] Send lines to other player
 - [ ] Gameover / KO
+- [X] Disable arrow keys scrolling window

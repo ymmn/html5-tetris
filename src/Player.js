@@ -20,7 +20,10 @@ function Player (board, controls) {
 	    case controls.hardDrop:
 	        board.termino.place();
 	        break;
+	    default:
+	    	return false;
 	    }
+	    return true;
 	};
 
 }

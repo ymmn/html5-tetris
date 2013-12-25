@@ -214,6 +214,11 @@ function TetrisBoard(origin, w, stage) {
     };
 
     this.die = function(){
+        if( !that.dead ) {
+            window.setTimeout(function(){
+                addToHighscores(linesSent);
+            }, 1000);
+        }
         that.dead = true;
         gameOverText = new createjs.Text("GAME OVER!", "20px Arial", "#FFF");
         gameOverText.x = origin.x + 100;

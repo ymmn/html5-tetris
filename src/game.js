@@ -4,7 +4,9 @@ var player1;
 var player2;
 var stage;
 var input = {};
+var tetris_state;
 var BOARD_DIMS;
+var fb = new Firebase("https://ymn.firebaseio.com/tetris/hiscores");
 
 function keyHandler(e, isPressed){
     switch (e.keyCode) {
@@ -49,6 +51,31 @@ function handleKeyDown(e) {
 }
 
 var tetrisBoard1;
+
+function addToHighscores(new_score) {
+    for(var i = 0; i < 5; i++) {
+        var cur_score = 0;
+        if( hiscores[i] !== undefined ) {
+            cur_score = hiscores[i].score;
+        }
+        if(new_score > cur_score) {
+            var name = prompt("What's your name, champ?");
+
+            /* shift all scores below this score down */
+            for(var j = 4; j > i; j--) {
+                hiscores[j] = hiscores[j-1];
+            }
+
+            hiscores[i] = {
+                name: name,
+                score: new_score
+            };
+            console.log(hiscores);
+            fb.update(hiscores);
+            break;
+        }
+    }
+}
 
 function init() {
 
@@ -97,6 +124,7 @@ function init() {
         tetrisBoard2,
         {});
 
+
     // call update on the stage to make it render the current display list to the canvas:
     stage.update();
 
@@ -106,6 +134,20 @@ function init() {
     }
 
     createjs.Ticker.setFPS(30);
+
+    fb.on('value', function(snapshot) {
+        $("#hiscores").empty();
+        var message = snapshot.val();
+        hiscores = message;
+        for(var i = 0; i < 5; i++){
+            var hs = hiscores[i];
+            if( hs !== undefined ) {
+                $("#hiscores").append("<li>" + hs.name + ": " + hs.score + "</li>");
+            } else {
+                $("#hiscores").append("<li>0</li>");
+            }
+        }
+    });
 
 }
 

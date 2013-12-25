@@ -22,3 +22,6 @@ TODOS
 - [ ] COMMENT CODE
 - [ ] Fix slippery controls
 - [ ] Add sound
+- [ ] Networking: Record game state into Json and parse it back
+- [ ] Networking: use firebase for easy basic networking functionality
+- [X] Basic hiscores

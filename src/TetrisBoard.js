@@ -31,6 +31,25 @@ function TetrisBoard(origin, w, stage) {
             ]
         },
 
+        /* Square */
+        {
+            color: "AFA",
+            shape: [
+                [
+               		"XX--",
+               		"XX--", "", ""],
+           		[
+               		"XX--",
+               		"XX--", "", ""],
+           		[
+               		"XX--",
+               		"XX--", "", ""],
+           		[
+               		"XX--",
+               		"XX--", "", ""]
+            ]
+        },
+
         /* L-shape */
         {
             color: "FF0",

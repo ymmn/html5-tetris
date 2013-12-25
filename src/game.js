@@ -3,19 +3,43 @@ var GRID_WIDTH = 10;
 var player1;
 var player2;
 var stage;
+var input = {};
 var BOARD_DIMS;
 
-function handleKeyDown(e) {
-    // for crossbrowser compatibility, as found in CreateJS example code
-    if (!e) {
-        var e = window.event;
+function keyHandler(e, isPressed){
+    switch (e.keyCode) {
+    case Keycode.LEFT:
+        input.left = isPressed;
+        break;
+    case Keycode.RIGHT:
+        input.right = isPressed;
+        break;
+    case Keycode.UP:
+        input.up = isPressed;
+        break;
+    case Keycode.DOWN:
+        input.down = isPressed;
+        break;
+    case Keycode.P:
+        input.p = isPressed;
+        break;
+    case Keycode.SPACE:
+        input.space = isPressed;
+        break;
+    default:
+        return false;
     }
+    return true;
+}
 
-    var preventDef = player1.handleKeyDown(e);
-    preventDef = player2.handleKeyDown(e) || preventDef;
+function handleKeyUp(e) {
+    keyHandler(e, false);
+}
 
+function handleKeyDown(e) {
+    
     /* prevent arrow keys from scrolling window */
-    if( preventDef ) {
+    if( keyHandler(e, true) ) {
         e.preventDefault();
     }
 
@@ -32,6 +56,7 @@ function init() {
     stage = new createjs.Stage(canvas);
 
     window.onkeydown = handleKeyDown;
+    window.onkeyup = handleKeyUp;
 
 
     var w = canvas.height/22;
@@ -77,10 +102,17 @@ function init() {
         createjs.Ticker.addEventListener("tick", tick);
     }
 
+    createjs.Ticker.setFPS(30);
+
 }
 
 function tick(event) {
     //tick event
+    // if(window.event.keyCode == Keycode.RIGHT) {
+        // console.log("HEHE");
+    // }
+    if(createjs.Ticker.getTicks() % 10 == 0 )    console.log(createjs.Ticker.getMeasuredFPS());
+    player1.tick(input);
     tetrisBoard1.tick();
     tetrisBoard2.tick();
     stage.update();

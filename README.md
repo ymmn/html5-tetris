@@ -12,6 +12,7 @@ TODOS
 - [X] Gameover
 - [ ] KO
 - [X] Disable arrow keys scrolling window
-- [ ] Undebounce arrow keys
+- [X] Undebounce arrow keys
+- [X] Cannot move and rotate at same time
 - [ ] Save/change termino
 - [ ] Next queu

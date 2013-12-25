@@ -11,3 +11,4 @@ TODOS
 - [ ] Send lines to other player
 - [ ] Gameover / KO
 - [X] Disable arrow keys scrolling window
+- [ ] Undebounce arrow keys

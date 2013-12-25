@@ -6,6 +6,7 @@ function TetrisBoard(origin, w, stage) {
         lo: 0,
         hi: WIDTH * GRID_WIDTH
     };
+    var opponent;
     var stage;
     var gameGrid;
     var paused = false;
@@ -193,6 +194,17 @@ function TetrisBoard(origin, w, stage) {
 
     }
 
+    this.addConcreteLines = function (numlines) {
+    	deadTerminos.addConcreteLines(numlines);
+    };
+
+    this.setOpponent = function(o) {
+    	opponent = o;
+    }
+
+    this.attackOpponent = function(linesCleared){
+    	opponent.addConcreteLines(linesCleared);
+    };
 
     this.newTermino = function() {
         var ind = Math.floor(Math.random() * TERMINO_SHAPES.length);
@@ -209,7 +221,7 @@ function TetrisBoard(origin, w, stage) {
 
     var _init = function() {
 	    drawGameGrid(stage);
-	    deadTerminos = new DeadTerminos(WIDTH);
+	    deadTerminos = new DeadTerminos(WIDTH, origin, that);
 	    that.newTermino();
     };
 

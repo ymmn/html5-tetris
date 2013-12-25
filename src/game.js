@@ -44,6 +44,9 @@ function init() {
         stage
     );
 
+    tetrisBoard1.setOpponent(tetrisBoard2);
+    tetrisBoard2.setOpponent(tetrisBoard1);
+
     player1 = new Player(
         tetrisBoard1,
         {

@@ -1,25 +1,41 @@
-function DeadTerminos(w) {
+function DeadTerminos(w, origin, board) {
 
 	var WIDTH = w;
     var _grid = Array(GRID_WIDTH);
-    var _numConcreteLines = 0;
+    var _concreteLines = [];
     for (var i = 0; i < GRID_WIDTH; i++) {
         _grid[i] = Array(GRID_HEIGHT);
     }
 
     this.isOccupied = function (x, y) {
-    	if( y >= (GRID_HEIGHT - _numConcreteLines) ) return true;
-        return _grid[x][y + _numConcreteLines] !== undefined;
+    	if( y >= (GRID_HEIGHT - _concreteLines.length) ) return true;
+        return _grid[x][y + _concreteLines.length] !== undefined;
     };
 
     this.addConcreteLines = function(numLines) {
-    	_numConcreteLines += numLines;
     	for(var i = 0; i < _grid.length; i++){
     		for(var j = 0; j < _grid[0].length; j++) {
     			if(_grid[i][j] !== undefined) {
     				_grid[i][j].y -= numLines * WIDTH;
     			}
     		}
+    	}
+    	for(var i = 0; i < numLines; i++) {
+    		var line = [];
+    		for(var j = 0; j < GRID_WIDTH; j++) {
+                var s = new createjs.Shape();
+                var g = s.graphics;
+
+                g.beginStroke("#000");
+
+                var color = "#888";
+                g.beginFill(color);
+                g.drawRect(origin.x + j * WIDTH, origin.y + (GRID_HEIGHT - 1 - _concreteLines.length) * WIDTH, WIDTH, WIDTH);
+                g.endFill();
+                stage.addChild(s);
+                line.push(s);
+    		}
+    		_concreteLines.push(line);
     	}
     };
 
@@ -30,7 +46,7 @@ function DeadTerminos(w) {
         for (var y = 0; y < shape.length; y++) {
             for (var x = 0; x < shape[0].length; x++) {
                 if (shape[x][y] !== undefined) {
-                    _grid[pos.x() + x][pos.y() + y + _numConcreteLines] = shape[x][y];
+                    _grid[pos.x() + x][pos.y() + y + _concreteLines.length] = shape[x][y];
                 }
             }
         }
@@ -61,6 +77,7 @@ function DeadTerminos(w) {
     };
 
     var _checkCompeletedLines = function () {
+    	var cleared = 0;
         for (var y = 0; y < GRID_HEIGHT; y++) {
             var completed = true;
             for (var x = 0; x < GRID_WIDTH; x++) {
@@ -72,8 +89,11 @@ function DeadTerminos(w) {
             if (completed) {
                 _deleteLine(y);
                 _pushLinesDown(y);
+                cleared++;
             }
         }
+        board.attackOpponent(cleared);
+        console.log("cleared " + cleared);
     };
 
     window.boom = this.addConcreteLines;

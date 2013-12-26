@@ -23,7 +23,7 @@ function keyHandler(e, isPressed){
         input.down = isPressed;
         break;
     case Keycode.P:
-        input.p = isPressed;
+        input.pause = isPressed;
         break;
     case Keycode.SPACE:
         input.space = isPressed;

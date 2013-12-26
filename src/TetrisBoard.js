@@ -13,7 +13,7 @@ function TetrisBoard(origin, w, stage) {
     var opponent;
     var stage;
     var gameGrid;
-    var paused = false;
+    that.paused = false;
     var linesSentText;
     var gameOverText;
     var linesSent = 0;
@@ -265,7 +265,7 @@ function TetrisBoard(origin, w, stage) {
     };
 
     this.tick = function(){
-	    if (!that.dead && !paused && createjs.Ticker.getTicks() % 40 === 0) {
+	    if (!that.dead && !that.paused && createjs.Ticker.getTicks() % 40 === 0) {
 	        that.termino.fall();
 	    }
     };

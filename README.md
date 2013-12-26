@@ -20,7 +20,7 @@ TODOS
 - [ ] Controls: allow rotate into right or left adjacent location
 - [ ] Start menu
 - [ ] COMMENT CODE
-- [ ] Fix slippery controls
+- [X] Fix slippery controls
 - [ ] Add sound
 - [ ] Networking: Record game state into Json and parse it back
 - [ ] Networking: use firebase for easy basic networking functionality

@@ -56,6 +56,36 @@ function Player (board, controls) {
 		return false;
 	}
 
+	this.loadFromJson = function() {
+		var test = {
+			deadTerminos: [
+				"----------",
+				"----------",
+				"----------",
+				"----------",
+				"----------",
+				"----------",
+				"----------",
+				"----------",
+				"----------",
+				"----------",
+				"----------",
+				"----------",
+				"----------",
+				"----------",
+				"----------",
+				"----------",
+				"----------",
+				"----------",
+				"----------",
+				"1112223334"
+			],
+			termino: 1
+		};
+		deadTerminos.loadFromJson();
+
+	};
+
 	this.tick = function(input){
 		var ret = false;
 		if( _debounceLeftRight(input, "left") ) {
@@ -74,7 +104,7 @@ function Player (board, controls) {
 			board.termino.place();
 		}
 		if(_debounce(input, "pause") ) {
-			board.paused = !paused;
+			board.paused = !board.paused;
 		}
 		if(_debounce(input, "swap") ) {
 			board.swapWithSavedTermino();

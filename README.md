@@ -25,3 +25,4 @@ TODOS
 - [ ] Networking: Record game state into Json and parse it back
 - [ ] Networking: use firebase for easy basic networking functionality
 - [X] Basic hiscores
+- [ ] Should be able to rotate block even above screen

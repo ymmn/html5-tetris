@@ -133,7 +133,7 @@ function init() {
         createjs.Ticker.addEventListener("tick", tick);
     }
 
-    createjs.Ticker.setFPS(30);
+    createjs.Ticker.setFPS(60);
 
     fb.on('value', function(snapshot) {
         $("#hiscores").empty();

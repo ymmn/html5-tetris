@@ -2,13 +2,13 @@ function Player (board, controls) {
 	
 	var _bounce = {};
 	var _rate = {
-		right: 2,
-		left: 2,
-		up: 5,
-		space: 5,
-		pause: 5,
-		down: 2,
-		swap: 5
+		right: 5,
+		left: 5,
+		up: 10,
+		space: 10,
+		pause: 10,
+		down: 4,
+		swap: 10
 	};
 
 	var _debounce = function(input, key) {

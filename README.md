@@ -26,3 +26,4 @@ TODOS
 - [ ] Networking: use firebase for easy basic networking functionality
 - [X] Basic hiscores
 - [ ] Should be able to rotate block even above screen
+- [ ] Get T-spins to work

@@ -4,6 +4,7 @@ var player1;
 var player2;
 var stage;
 var input = {};
+var mute = false;
 var tetris_state;
 var BOARD_DIMS;
 var fb = new Firebase("https://ymn.firebaseio.com/tetris/hiscores");
@@ -42,7 +43,7 @@ function handleKeyUp(e) {
 }
 
 function handleKeyDown(e) {
-    
+
     /* prevent arrow keys from scrolling window */
     if( keyHandler(e, true) ) {
         e.preventDefault();
@@ -51,6 +52,12 @@ function handleKeyDown(e) {
 }
 
 var tetrisBoard1;
+
+
+function doneLoading(event) {
+    // start the music
+    createjs.Sound.play("background", createjs.Sound.INTERRUPT_NONE, 0, 0, -1, 0.05);
+}
 
 function addToHighscores(new_score) {
     for(var i = 0; i < 5; i++) {
@@ -74,6 +81,16 @@ function addToHighscores(new_score) {
             fb.update(hiscores);
             break;
         }
+    }
+}
+
+function toggleSound(){
+    mute = !mute;
+    createjs.Sound.setMute(mute);
+    if(mute) {
+        $("#mute").html("Unmute Sound");
+    } else {
+        $("#mute").html("Mute Sound");
     }
 }
 
@@ -135,6 +152,31 @@ function init() {
 
     createjs.Ticker.setFPS(60);
 
+    // begin loading content (only sounds to load)
+    var manifest = [{
+        id: "background",
+        src: "assets/background.mp3"
+    }, {
+        id: "hardDrop",
+        src: "assets/SFX_PieceHardDrop.ogg"
+    }, {
+        id: "lineClear",
+        src: "assets/SFX_SpecialLineClearSingle.ogg"
+    },
+    {
+        id: "fall",
+        src: "assets/SFX_PieceFall.ogg"
+    },
+    {
+        id: "rotate",
+        src: "assets/SFX_PieceRotateLR.ogg"
+    }];
+
+    preload = new createjs.LoadQueue();
+    preload.installPlugin(createjs.Sound);
+    preload.addEventListener("complete", doneLoading); // add an event listener for when load is completed
+    preload.loadManifest(manifest);
+
     fb.on('value', function(snapshot) {
         $("#hiscores tbody").empty();
         var message = snapshot.val();
@@ -148,6 +190,8 @@ function init() {
             }
         }
     });
+
+    $("#mute").click(toggleSound);
 
 }
 

@@ -98,9 +98,11 @@ function Player (board, controls) {
 			board.termino.fall();
 		}
 		if(_debounce(input, "up") ) {
+		    createjs.Sound.play("rotate", createjs.Sound.INTERRUPT_NONE, 0, 0, 0, 0.15);
 			board.termino.rotateRight();
 		}
 		if(_debounce(input, "space") ) {
+		    createjs.Sound.play("hardDrop", createjs.Sound.INTERRUPT_NONE, 0, 0, 0, 0.05);
 			board.termino.place();
 		}
 		if(_debounce(input, "pause") ) {

@@ -266,6 +266,7 @@ function TetrisBoard(origin, w, stage) {
 
     this.tick = function(){
 	    if (!that.dead && !that.paused && createjs.Ticker.getTicks() % 40 === 0) {
+            createjs.Sound.play("fall", createjs.Sound.INTERRUPT_NONE, 0, 0, 0, 0.2);
 	        that.termino.fall();
 	    }
     };

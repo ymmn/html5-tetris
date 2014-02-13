@@ -3,19 +3,21 @@
 <head>
 	<title>Tetris</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<script src="lib/easel.js"></script>
+	<script src="lib/sylvester.js"></script>
+	<script src='lib/jquery.js'></script>
+	<script src='lib/sound.js'></script>
+	<script src='lib/preload.js'></script>
+	<script src="src/Keycode.js"></script>
+	<script src="src/TetrisBoard.js"></script>
+	<script src="src/DeadTerminos.js"></script>
+	<script src="src/Termino.js"></script>
+	<script src="src/Player.js"></script>
+	<link type="text/css" rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css"></link>
+	<script src='https://cdn.firebase.com/v0/firebase.js'></script>
+	<script src='https://cdn.firebase.com/v0/firebase.js'></script>
+	<script src="src/game.js"></script>
 </head>
-<script src="lib/easel.js"></script>
-<script src="lib/sylvester.js"></script>
-<script src='lib/jquery.js'></script>
-<script src="src/Keycode.js"></script>
-<script src="src/TetrisBoard.js"></script>
-<script src="src/DeadTerminos.js"></script>
-<script src="src/Termino.js"></script>
-<script src="src/Player.js"></script>
-<link type="text/css" rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css"></link>
-<script src='https://cdn.firebase.com/v0/firebase.js'></script>
-<script src='https://cdn.firebase.com/v0/firebase.js'></script>
-<script src="src/game.js"></script>
 <body onload="init();">
 	<a href="https://github.com/ymmn/html5-tetris"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
 	<div style="margin-top:30px" class="container">
@@ -30,7 +32,7 @@
 					<li>Swap piece: C</li>
 					<li>Pause: P</li>
 				</ul>
-				<div style="margin-top:100px">
+				<div style="margin-top:50px">
 					<h1>High Scores</h1>
 					<table class="table" id="hiscores">
 						<thead>
@@ -43,6 +45,7 @@
 						</tbody>
 					</table>
 				</div>
+				<button id="mute" class="btn btn-large">Mute Sound</button>
 			</div>
 			<div class="col-xs-1"></div>
 			<div class="col-xs-4 canvasContainer">

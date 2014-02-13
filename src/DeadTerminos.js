@@ -117,7 +117,9 @@ function DeadTerminos(board) {
         }
         board.attackOpponent(cleared);
         _removeConcreteLines(cleared);
-        console.log("cleared " + cleared);
+        if(cleared > 0) {
+            createjs.Sound.play("lineClear", createjs.Sound.INTERRUPT_NONE, 0, 0, 0, 0.2);
+        }
     };
 
     this.addConcreteLines(5);

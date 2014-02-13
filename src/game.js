@@ -9,6 +9,10 @@ var tetris_state;
 var BOARD_DIMS;
 var fb = new Firebase("https://ymn.firebaseio.com/tetris/hiscores");
 
+var READY = -100;
+var LOADING = -101;
+var state = LOADING;
+
 function keyHandler(e, isPressed){
     switch (e.keyCode) {
     case Keycode.LEFT:
@@ -54,10 +58,7 @@ function handleKeyDown(e) {
 var tetrisBoard1;
 
 
-function doneLoading(event) {
-    // start the music
-    createjs.Sound.play("background", createjs.Sound.INTERRUPT_NONE, 0, 0, -1, 0.05);
-}
+
 
 function addToHighscores(new_score) {
     for(var i = 0; i < 5; i++) {
@@ -112,38 +113,6 @@ function init() {
         height: w * GRID_HEIGHT + 60
     };
 
-    tetrisBoard2 = new TetrisBoard(
-        { x: BOARD_DIMS.width + 50, y: 0 },
-        w,
-        stage
-    );
-
-    tetrisBoard1 = new TetrisBoard(
-        { x: 0, y: 0 },
-        w,
-        stage
-    );
-
-    tetrisBoard1.setOpponent(tetrisBoard2);
-    tetrisBoard2.setOpponent(tetrisBoard1);
-
-    player1 = new Player(
-        tetrisBoard1,
-        {
-            left: Keycode.LEFT,
-            right: Keycode.RIGHT,
-            up: Keycode.UP,
-            down: Keycode.DOWN,
-            pause: Keycode.P,
-            hardDrop: Keycode.SPACE
-        });
-    player2 = new Player(
-        tetrisBoard2,
-        {});
-
-
-    // call update on the stage to make it render the current display list to the canvas:
-    stage.update();
 
     //start game timer   
     if (!createjs.Ticker.hasEventListener("tick")) {
@@ -170,10 +139,66 @@ function init() {
     {
         id: "rotate",
         src: "assets/SFX_PieceRotateLR.ogg"
+    },
+    {
+        id: "lockdown",
+        src: "assets/SFX_PieceLockdown.ogg"
     }];
+
+
+    /* show loading */
+    messageField = new createjs.Text("Loading", "bold 24px Arial", "#000");
+    messageField.maxWidth = 1000;
+    messageField.textAlign = "center";
+    messageField.x = canvas.width / 2;
+    messageField.y = canvas.height / 2;
+    stage.addChild(messageField);
+
+    var updateLoading = function() {
+        messageField.text = "Loading " + (preload.progress*100|0) + "%";
+        stage.update();
+    };
+
+    var doneLoading = function(event) {
+        // start the music
+        state = READY;
+        stage.removeChild(messageField);
+        createjs.Sound.play("background", createjs.Sound.INTERRUPT_NONE, 0, 0, -1, 0.25);
+
+        tetrisBoard2 = new TetrisBoard(
+            { x: BOARD_DIMS.width + 50, y: 0 },
+            w,
+            stage
+        );
+
+        tetrisBoard1 = new TetrisBoard(
+            { x: 0, y: 0 },
+            w,
+            stage
+        );
+
+        tetrisBoard1.setOpponent(tetrisBoard2);
+        tetrisBoard2.setOpponent(tetrisBoard1);
+
+        player1 = new Player(
+            tetrisBoard1,
+            {
+                left: Keycode.LEFT,
+                right: Keycode.RIGHT,
+                up: Keycode.UP,
+                down: Keycode.DOWN,
+                pause: Keycode.P,
+                hardDrop: Keycode.SPACE
+            });
+        player2 = new Player(
+            tetrisBoard2,
+            {});
+
+    };
 
     preload = new createjs.LoadQueue();
     preload.installPlugin(createjs.Sound);
+    preload.addEventListener("progress", updateLoading);
     preload.addEventListener("complete", doneLoading); // add an event listener for when load is completed
     preload.loadManifest(manifest);
 
@@ -196,9 +221,11 @@ function init() {
 }
 
 function tick(event) {
-    player1.tick(input);
-    tetrisBoard1.tick();
-    tetrisBoard2.tick();
-    stage.update();
+    if( state == READY ) {
+        player1.tick(input);
+        tetrisBoard1.tick();
+        tetrisBoard2.tick();
+        stage.update();
+    }
 }
 

@@ -91,7 +91,7 @@ function init() {
 
     var w = canvas.height/22;
     BOARD_DIMS = {
-        width: w * GRID_WIDTH + 120,
+        width: w * GRID_WIDTH + 150,
         height: w * GRID_HEIGHT + 60
     };
 
@@ -136,15 +136,15 @@ function init() {
     createjs.Ticker.setFPS(60);
 
     fb.on('value', function(snapshot) {
-        $("#hiscores").empty();
+        $("#hiscores tbody").empty();
         var message = snapshot.val();
         hiscores = message;
         for(var i = 0; i < 5; i++){
             var hs = hiscores[i];
             if( hs !== undefined ) {
-                $("#hiscores").append("<li>" + hs.name + ": " + hs.score + "</li>");
+                $("#hiscores tbody").append("<tr><td>" + hs.name + "</td><td>" + hs.score + "</td></tr>");
             } else {
-                $("#hiscores").append("<li>0</li>");
+                $("#hiscores tbody").append("<tr><td>N/A</td><td>N/A</td></tr>");
             }
         }
     });

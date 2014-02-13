@@ -12,26 +12,43 @@
 <script src="src/DeadTerminos.js"></script>
 <script src="src/Termino.js"></script>
 <script src="src/Player.js"></script>
+<link type="text/css" rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css"></link>
+<script src='https://cdn.firebase.com/v0/firebase.js'></script>
 <script src='https://cdn.firebase.com/v0/firebase.js'></script>
 <script src="src/game.js"></script>
 <body onload="init();">
-	<pre style="display: inline-block; margin-right: 100px;">
-	Controls:
-		- Movement: LEFT, RIGHT
-		- Rotate: UP
-		- Soft drop: DOWN
-		- Hard drop: SPACE
-		- Swap piece: C
-		- Pause: P
-	</pre>
-	<div style="display: inline-block;">
-		High Scores:
-		<ol id="hiscores">
-
-		</ol>
-	</div>
-	<div class="canvasContainer">
-		<canvas id="gameCanvas" width="1000" height="600"></canvas>
+	<a href="https://github.com/ymmn/html5-tetris"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
+	<div style="margin-top:30px" class="container">
+		<div class="row">
+			<div class="col-xs-4">
+				<h1>Controls:</h1>
+				<ul>
+					<li>Movement: LEFT, RIGHT</li>
+					<li>Rotate: UP</li>
+					<li>Soft drop: DOWN</li>
+					<li>Hard drop: SPACE</li>
+					<li>Swap piece: C</li>
+					<li>Pause: P</li>
+				</ul>
+				<div style="margin-top:100px">
+					<h1>High Scores</h1>
+					<table class="table" id="hiscores">
+						<thead>
+							<tr>
+								<th>Player</th>
+								<th>Score</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="col-xs-1"></div>
+			<div class="col-xs-4 canvasContainer">
+				<canvas id="gameCanvas" width="470" height="600"></canvas>
+			</div>
+		</div>
 	</div>
 
 </body>
